@@ -156,6 +156,7 @@ window.SCM_CONTENT.en = {
   "k155": "Visit",
   "k156": "Come to the museum at the agreed time.",
   "k149": "{n} / {m} · hover to pause",
+  "k157": "Enlarge photo",
   "k148": "Articles",
   "dirLabels": {
     "t1": "tour “Overview: from mainframe to smartphone”",

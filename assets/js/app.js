@@ -9,6 +9,7 @@
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
   var refreshDecor = null;
+  var zoomLabels = []; // підписи «Збільшити фото», які треба перекласти при зміні мови
   function t(key) { return (CONTENT[lang] || CONTENT.uk || {})[key]; }
 
   /* ---------- Мова ---------- */
@@ -42,6 +43,7 @@
     $$('[data-href-' + lang + ']').forEach(function (a) { a.setAttribute('href', a.getAttribute('data-href-' + lang)); });
     updateSentLabel();
     if (refreshDecor) refreshDecor();
+    zoomLabels.forEach(function (f) { f(); });
     if (remember) {
       try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
       var url = new URL(window.location.href);
@@ -121,8 +123,8 @@
     });
   });
 
-  // Список статей: при наведенні на картку її ілюстрація «вмикається»
-  $$('.card-article').forEach(function (card) {
+  // Картки з обкладинкою (статті, екскурсії, курси): при наведенні ілюстрація «вмикається»
+  $$('.card').forEach(function (card) {
     var cover = $('.card-cover', card);
     if (!cover) return;
     var on = function () { cover.classList.add('on'); };
@@ -133,29 +135,97 @@
     card.addEventListener('focusout', off);
   });
 
-  var zooms = $$('.fig-zoom');
-  if (zooms.length && typeof HTMLDialogElement === 'function') {
-    var box = document.createElement('dialog');
-    box.className = 'lightbox';
-    box.innerHTML = '<div class="lightbox-bar"><span class="lightbox-cap"></span>' +
-      '<button type="button" class="btn btn-ghost lightbox-close"></button></div><img alt="">';
-    document.body.appendChild(box);
-    var bigImg = $('img', box), cap = $('.lightbox-cap', box), closeBtn = $('.lightbox-close', box);
+  // Перегляд фото на весь екран (фото в статтях і експонати на головній)
+  var lightbox = null;
+  function openPhoto(img, title) {
+    if (typeof HTMLDialogElement !== 'function') return;
+    if (!lightbox) {
+      lightbox = document.createElement('dialog');
+      lightbox.className = 'lightbox';
+      lightbox.innerHTML = '<div class="lightbox-bar"><span class="lightbox-cap"></span>' +
+        '<button type="button" class="btn btn-ghost lightbox-close"></button></div><img alt="">';
+      document.body.appendChild(lightbox);
+      $('.lightbox-close', lightbox).addEventListener('click', function () { lightbox.close(); });
+      // Клік по темному тлу навколо фото теж закриває
+      lightbox.addEventListener('click', function (e) { if (e.target === lightbox) lightbox.close(); });
+    }
+    var big = $('img', lightbox), closeBtn = $('.lightbox-close', lightbox);
+    big.src = img.currentSrc || img.src;
+    big.alt = img.alt;
+    $('.lightbox-cap', lightbox).textContent = title || '';
     closeBtn.textContent = '✕ ' + (t('k16') || 'Закрити');
-    closeBtn.addEventListener('click', function () { box.close(); });
-    // Клік по темному тлу навколо фото теж закриває
-    box.addEventListener('click', function (e) { if (e.target === box) box.close(); });
-    zooms.forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        var img = $('img', btn);
-        bigImg.src = img.currentSrc || img.src;
-        bigImg.alt = img.alt;
-        var title = $('.wtitle span', btn.closest('.fig'));
-        cap.textContent = title ? title.textContent : '';
-        box.showModal();
-        closeBtn.focus();
-      });
+    lightbox.showModal();
+    closeBtn.focus();
+  }
+  $$('.fig-zoom').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var title = $('.wtitle span', btn.closest('.fig'));
+      openPhoto($('img', btn), title && title.textContent);
     });
+  });
+  // Фото експонатів: натисніть (або Enter / пробіл), щоб збільшити
+  $$('.card-exhibit .ph-photo').forEach(function (ph) {
+    var img = $('img', ph);
+    if (!img) return;
+    ph.setAttribute('role', 'button');
+    ph.setAttribute('tabindex', '0');
+    ph.classList.add('zoomable');
+    var label = function () { ph.setAttribute('aria-label', (t('k157') || 'Збільшити фото') + ': ' + img.alt); };
+    label();
+    zoomLabels.push(label);
+    var open = function () { var title = $('.wtitle span', ph.closest('.card')); openPhoto(img, title && title.textContent); };
+    ph.addEventListener('click', open);
+    ph.addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); } });
+  });
+
+  /* ---------- Поява під час прокручування ---------- */
+
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if ('IntersectionObserver' in window && !calm) {
+    // Рядки «C:\MUSEUM> …» над розділами друкуються, коли розділ з'являється на екрані
+    var prompts = $$('.sec-head .prompt').filter(function (p) { return !p.querySelector('[data-i18n]') && !p.closest('.hero'); });
+    var typeIo = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (!entry.isIntersecting) return;
+        typeIo.unobserve(entry.target);
+        var el = entry.target, full = el.textContent, k = full.indexOf('>') + 2;
+        if (k < 2) return;
+        el.classList.add('typing');
+        el.textContent = full.slice(0, k);
+        var timer = setInterval(function () {
+          k++;
+          el.textContent = full.slice(0, k);
+          if (k >= full.length) { clearInterval(timer); el.classList.remove('typing'); }
+        }, 45);
+      });
+    }, { threshold: 1 });
+    prompts.forEach(function (p) { typeIo.observe(p); });
+
+    // Вікна-картки «відкриваються», коли доходите до них
+    // Перевірка простим прокручуванням: так вікна ніколи не залишаться невидимими
+    var wins = $$('.g3 > .card, .two > .win, .notes > .note, .prose > .fig');
+    wins.forEach(function (w, i) { w.style.setProperty('--reveal-d', (i % 3) * 90 + 'ms'); });
+    var reveal = function () {
+      var limit = window.innerHeight * 0.95;
+      wins = wins.filter(function (w) {
+        var r = w.getBoundingClientRect();
+        // Приховані картки (наприклад, «Показати більше») мають нульовий розмір — чекають своєї черги
+        if (r.height && r.top < limit) {
+          w.classList.add('shown');
+          // На сенсорних екранах наведення немає — обкладинка «вмикається» сама, щойно картка з'явилася
+          var cover = !window.matchMedia('(hover: hover)').matches && $('.card-cover', w);
+          if (cover) cover.classList.add('on');
+          return false;
+        }
+        return true;
+      });
+      if (!wins.length) { window.removeEventListener('scroll', reveal); window.removeEventListener('resize', reveal); }
+    };
+    document.documentElement.classList.add('reveal-on');
+    reveal();
+    window.addEventListener('scroll', reveal, { passive: true });
+    window.addEventListener('resize', reveal);
+    document.addEventListener('click', function () { setTimeout(reveal, 50); });
   }
 
   /* ---------- Вікно MUSEUM.EXE: «екран», що гортає експонати ---------- */

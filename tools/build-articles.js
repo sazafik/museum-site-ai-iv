@@ -383,3 +383,11 @@ for (const lang of Object.keys(LOCALES)) {
 // Стаття без перекладу: попередити, щоб не забути
 const missing = byLang.uk.filter(a => !byLang.en.some(x => x.slug === a.slug)).map(a => a.slug);
 if (missing.length) console.warn('Немає англійського перекладу: ' + missing.join(', '));
+
+// Обкладинки карток екскурсій і курсів на головній: <div class="card-cover fig-ill" data-ill="назва" …></div>
+// заповнюються малюнками з tools/illustrations.js (вони без слів, тож однакові для обох мов)
+const filled = index.replace(/(<div class="card-cover fig-ill" data-ill="(\w+)" aria-hidden="true">)[\s\S]*?(<\/div>)/g, (m, open, name, close) => {
+  if (!ILL[name]) throw new Error(`Немає ілюстрації «${name}» у tools/illustrations.js`);
+  return open + ILL[name]((uk) => esc(uk)) + close;
+});
+if (filled !== index) { fs.writeFileSync(path.join(ROOT, 'index.html'), filled); console.log('index.html (обкладинки)'); }

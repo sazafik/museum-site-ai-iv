@@ -537,7 +537,7 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
    стоять на одному рівні в усіх картках ряду (subgrid) */
 @supports (grid-template-rows: subgrid) {
   .g3:has(> .card .facts) { row-gap: var(--space-6); }
-  .g3:has(> .card .facts) > .card { display: grid; grid-row: span 7; grid-template-rows: subgrid; row-gap: 0; }
+  .g3:has(> .card .facts) > .card { display: grid; grid-row: span 8; grid-template-rows: subgrid; row-gap: 0; }
   .g3:has(> .card .facts) > .card > .winbody { display: grid; grid-row: span 6; grid-template-rows: subgrid; row-gap: var(--space-4); }
   .g3:has(> .card .facts) .facts { grid-row: span 3; grid-template-rows: subgrid; row-gap: var(--space-3); }
   .g3:has(> .card .facts) .card .btn { align-self: end; }
@@ -677,7 +677,97 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
   .fig-cap { padding: var(--space-3); }
 }
 
+/* Обкладинки екскурсій і курсів */
+.ill-art .scr { fill: #0f2252; stroke: var(--blue-400); stroke-width: 2; }
+.ill-art .tick-dot { fill: var(--blue-400); }
+.ill-art .runner { fill: var(--white); transition: transform 400ms var(--ui-ease); }
+.ill-art .ln.dash { stroke-dasharray: 6 6; }
+.ill-art .pad, .ill-art .ball, .ill-art .knob, .ill-art .scr-ico, .ill-art .eye { fill: var(--white); }
+.ill-art .btn-red { fill: var(--blue-200); }
+.ill-art .stick-rod { stroke: var(--blue-200); stroke-width: 6; }
+.ill-art .stick { transform-box: view-box; transform-origin: 414px 196px; }
+.ill-art .head { fill: var(--blue-400); transition: fill 300ms; }
+.ill-art .hand { fill: var(--blue-200); opacity: 0; }
+.ill-art .hair { fill: var(--blue-200); }
+.ill-art .body { fill: var(--blue-600); stroke: var(--blue-200); stroke-width: 2; }
+.ill-art .face { opacity: .25; transition: opacity 400ms; }
+.ill-art .phone-ico { fill: var(--white); }
+.ill-art .ring { fill: var(--blue-400); }
+.ill-art .code { fill: var(--blue-400); transform-box: fill-box; transform-origin: left; }
+.ill-art .caret { fill: var(--white); }
+.ill-art .block { fill: var(--blue-200); }
+.ill-art .hero-b { fill: var(--white); }
+.ill-art .hero-e { fill: var(--blue-700); }
+.ill-art .board { fill: #1a3a6e; stroke: var(--blue-400); stroke-width: 2; }
+.ill-art .chip { fill: var(--blue-700); stroke: var(--blue-200); stroke-width: 2; }
+.ill-art .led { fill: var(--blue-600); }
+.ill-art .lid { transform-box: view-box; transform-origin: 70px 103px; transition: transform 500ms var(--ui-ease); }
+.ill-art .spark { stroke: var(--white); stroke-width: 3; opacity: 0; }
+.ill-art .drv-h { fill: var(--blue-200); }
+.ill-art .drv-s { fill: var(--white); }
+.ill-art .driver { transform-box: fill-box; transform-origin: center; }
+.fig-ill.on .ill-art .face { opacity: 1; }
+.fig-ill.on .ill-art .wave .hand { opacity: 1; }
+.fig-ill.on .ill-art .lid { transform: rotate(-24deg); }
+.fig-ill.on .ill-art .led { fill: var(--white); }
+.fig-ill.on .ill-art .head { fill: var(--blue-200); }
+@media (prefers-reduced-motion: no-preference) {
+  .fig-ill.on .ill-art .dev .scr { animation: ill-dev 2.8s steps(1) infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .runner { animation: ill-run 2.8s steps(1) infinite; }
+  .fig-ill.on .ill-art .ball { animation: ill-ball 1.6s linear infinite; }
+  .fig-ill.on .ill-art .pad-l { animation: ill-pad 1.6s ease-in-out infinite; }
+  .fig-ill.on .ill-art .pad-r { animation: ill-pad 1.6s ease-in-out infinite reverse; }
+  .fig-ill.on .ill-art .stick { animation: ill-stick .8s ease-in-out infinite alternate; }
+  .fig-ill.on .ill-art .kid .hand { animation: ill-hand 2.4s steps(1) infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .wave { animation: ill-wave .5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: bottom; }
+  .fig-ill.on .ill-art .ring { animation: ill-blk 1.2s steps(1) infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .code { animation: ill-code 4.2s steps(6) infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .caret { animation: blink 1s steps(1) infinite; }
+  .fig-ill.on .ill-art .hero { animation: ill-jump 1.4s ease-in-out infinite; }
+  .fig-ill.on .ill-art .spark { animation: ill-spark 1.2s steps(1) infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .driver { animation: ill-driver .6s ease-in-out infinite alternate; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fig-ill.on .ill-art .hand, .fig-ill.on .ill-art .spark { opacity: 1; }
+}
+@keyframes ill-dev { 0% { fill: var(--blue-200); } 20%, 100% { fill: #0f2252; } }
+@keyframes ill-run { 0% { transform: none; } 25% { transform: translateX(117px); } 50% { transform: translateX(232px); } 75%, 100% { transform: translateX(337px); } }
+@keyframes ill-ball { 0% { transform: translate(-90px, -40px); } 25% { transform: translate(0, 40px); } 50% { transform: translate(90px, -10px); } 75% { transform: translate(0, -50px); } 100% { transform: translate(-90px, -40px); } }
+@keyframes ill-pad { 0%, 100% { transform: translateY(-34px); } 50% { transform: translateY(30px); } }
+@keyframes ill-stick { from { transform: rotate(-14deg); } to { transform: rotate(14deg); } }
+@keyframes ill-hand { 0%, 45% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes ill-wave { from { transform: rotate(-18deg); } to { transform: rotate(18deg); } }
+@keyframes ill-code { 0% { transform: scaleX(0); } 30%, 100% { transform: scaleX(1); } }
+@keyframes ill-jump { 0%, 100% { transform: none; } 40% { transform: translate(40px, -46px); } 70% { transform: translate(70px, 0); } }
+@keyframes ill-spark { 0%, 40% { opacity: 1; } 50%, 100% { opacity: 0; } }
+@keyframes ill-driver { from { transform: rotate(-12deg); } to { transform: rotate(12deg); } }
+
 /* Обкладинки карток статей: ілюстрація «вмикається», коли наводите на картку */
 .card-cover { border-bottom: var(--stroke) solid var(--border); background: var(--blue-700); overflow: hidden; }
 .card-cover .ill-art { transition: transform 450ms var(--ui-ease); }
-@media (hover: hover) { .card-article:hover .card-cover .ill-art { transform: scale(1.04); } }
+@media (hover: hover) { .card:hover .card-cover .ill-art { transform: scale(1.04); } }
+
+/* Фото експонатів збільшуються по кліку */
+.ph-photo.zoomable { cursor: zoom-in; }
+.ph-photo.zoomable:focus-visible { outline: var(--stroke-strong) solid var(--focus); outline-offset: calc(var(--stroke-strong) * -1); }
+
+/* Рядок «C:\MUSEUM> …» друкується: курсор-блок у кінці */
+.prompt.typing::after { content: ""; display: inline-block; width: .6em; height: 1em; margin-left: 2px; vertical-align: text-bottom; background: currentColor; }
+
+/* Вікна «відкриваються», коли з'являються на екрані (клас reveal-on додає скрипт) */
+.reveal-on .g3 > .card:not(.shown), .reveal-on .two > .win:not(.shown),
+.reveal-on .notes > .note:not(.shown), .reveal-on .prose > .fig:not(.shown) {
+  opacity: 0; transform: translateY(var(--space-6)) scale(.97);
+}
+.reveal-on .g3 > .card.shown, .reveal-on .two > .win.shown, .reveal-on .notes > .note.shown, .reveal-on .prose > .fig.shown {
+  /* backwards, а не both: після анімації картка знову реагує на наведення (підйом) */
+  animation: win-open 420ms var(--ui-ease) backwards; animation-delay: var(--reveal-d, 0ms);
+}
+@media print {
+  .reveal-on .g3 > .card, .reveal-on .two > .win, .reveal-on .notes > .note, .reveal-on .prose > .fig { opacity: 1 !important; transform: none !important; }
+}
+@keyframes win-open {
+  0% { opacity: 0; transform: translateY(var(--space-6)) scale(.97); clip-path: inset(0 0 100% 0); }
+  40% { opacity: 1; clip-path: inset(0 0 40% 0); }
+  100% { opacity: 1; transform: none; clip-path: inset(0 0 -20% 0); }
+}
