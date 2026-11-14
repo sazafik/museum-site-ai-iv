@@ -121,6 +121,18 @@
     });
   });
 
+  // Список статей: при наведенні на картку її ілюстрація «вмикається»
+  $$('.card-article').forEach(function (card) {
+    var cover = $('.card-cover', card);
+    if (!cover) return;
+    var on = function () { cover.classList.add('on'); };
+    var off = function () { cover.classList.remove('on'); };
+    card.addEventListener('mouseenter', on);
+    card.addEventListener('mouseleave', off);
+    card.addEventListener('focusin', on);
+    card.addEventListener('focusout', off);
+  });
+
   var zooms = $$('.fig-zoom');
   if (zooms.length && typeof HTMLDialogElement === 'function') {
     var box = document.createElement('dialog');

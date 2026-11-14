@@ -558,7 +558,7 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
 /* Картки статей: рік, заголовок, анонс і кнопка на одному рівні в ряду */
 @supports (grid-template-rows: subgrid) {
   .g3:has(> .card-article) { row-gap: var(--space-6); }
-  .g3:has(> .card-article) > .card { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; }
+  .g3:has(> .card-article) > .card { display: grid; grid-row: span 6; grid-template-rows: subgrid; row-gap: 0; }
   .g3:has(> .card-article) > .card > .winbody { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: var(--space-4); }
   .g3:has(> .card-article) .card .btn { align-self: end; }
 }
@@ -676,3 +676,8 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
 @media (max-width: 767px) {
   .fig-cap { padding: var(--space-3); }
 }
+
+/* Обкладинки карток статей: ілюстрація «вмикається», коли наводите на картку */
+.card-cover { border-bottom: var(--stroke) solid var(--border); background: var(--blue-700); overflow: hidden; }
+.card-cover .ill-art { transition: transform 450ms var(--ui-ease); }
+@media (hover: hover) { .card-article:hover .card-cover .ill-art { transform: scale(1.04); } }

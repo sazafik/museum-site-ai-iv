@@ -325,8 +325,14 @@ ${pager}
 
 function listPage(lang, articles) {
   const L = LOCALES[lang];
+  // Обкладинка картки — та сама ілюстрація, що в статті; «вмикається» при наведенні
+  const cover = a => {
+    const ill = a.blocks.find(b => b.t === 'ill');
+    return ill && ILL[ill.name] ? `
+        <div class="card-cover fig-ill" aria-hidden="true">${ILL[ill.name]((uk, en) => esc(lang === 'en' ? en : uk))}</div>` : '';
+  };
   const cards = articles.map(a => `      <article class="win card card-article">
-        <div class="wtitle" aria-hidden="true"><span>${L.file}_${a.num}.TXT</span><span class="wctl"><span></span><span></span><span></span></span></div>
+        <div class="wtitle" aria-hidden="true"><span>${L.file}_${a.num}.TXT</span><span class="wctl"><span></span><span></span><span></span></span></div>${cover(a)}
         <div class="winbody">
           <p class="year"><svg class="ic i-m" aria-hidden="true"><use href="#ic-calendar"/></svg>${esc(a.years)}</p>
           <h2 class="disp ct">${inline(a.title)}</h2>
