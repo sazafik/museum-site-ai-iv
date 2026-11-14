@@ -12,6 +12,8 @@ The details matter here. The Z4 ran on relays — switches that click — rather
 
 "The first in the USSR" is confirmed by an official resolution of the Academy of Sciences in 1952. But "the first in the world" is not true: the EDSAC machine started working earlier.
 
+!photo manchester-baby.jpg | Racks of valves and wires with a round screen in the middle | A replica of the Manchester Baby (1948) in a Manchester museum. British stored-program machines, the Baby and EDSAC, ran before MESM. | [Parrot of Doom](https://commons.wikimedia.org/wiki/File:SSEM_Manchester_museum_close_up.jpg), CC BY-SA 3.0, Wikimedia Commons
+
 Other mistakes also turn up online: that MESM had 18,000 tubes (in fact, about 6,000) or that it was launched in 1952 (in fact, on 25 December 1951).
 
 ## The Address Language: one of the first
@@ -46,6 +48,8 @@ In the same way, Glushkov's memoirs are memories, not documents. They can be tru
 2. **Is there a document?** A resolution, minutes, a date in an archive?
 3. **Do other sources agree?** If everyone else is careful and one source shouts "the first in the world", that is a reason to stop and think.
 4. **First in what, exactly?** First in a city, a country, Europe or the world — these are very different things.
+
+!ill legend | Check a loud headline against the checklist: “the world’s first” becomes the precise “the first in the USSR”.
 
 ## Fun fact
 

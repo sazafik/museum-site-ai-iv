@@ -562,3 +562,117 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
   .g3:has(> .card-article) > .card > .winbody { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: var(--space-4); }
   .g3:has(> .card-article) .card .btn { align-self: end; }
 }
+
+/* ===== Статті: фото та інтерактивні ілюстрації ===== */
+.prose > .fig { max-width: none; margin: var(--space-4) 0; }
+.fig { box-shadow: var(--shadow-window); }
+.fig-body { background: var(--blue-700); }
+.fig-cap { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); padding: var(--space-3) var(--space-4);
+  border-top: var(--stroke) solid var(--border); font-size: var(--font-size-caption); line-height: var(--line-height-caption); }
+.fig-cap > span:first-of-type { flex: 1 1 16em; }
+.fig-cap .credit { flex-basis: 100%; color: var(--text-secondary); font-size: var(--font-size-label); line-height: var(--line-height-label); }
+.ill-toggle { min-height: var(--tap-min); padding: var(--space-1) var(--space-4); font-size: var(--font-size-label); }
+.fig-ill.on .ill-toggle { background: var(--button); color: var(--button-text); }
+/* Фото: натисніть, щоб збільшити */
+.fig-zoom { display: block; width: 100%; padding: 0; border: 0; background: var(--blue-700); cursor: zoom-in; overflow: hidden; }
+.fig-zoom img { display: block; width: 100%; max-height: 520px; object-fit: contain; transition: transform 450ms var(--ui-ease); }
+@media (hover: hover) { .fig-zoom:hover img { transform: scale(1.03); } }
+.lightbox { max-width: min(96vw, 1400px); max-height: 96vh; padding: 0; border: var(--stroke) solid var(--white); background: var(--blue-700); color: var(--white); box-shadow: var(--shadow-window); }
+.lightbox::backdrop { background: rgba(35, 58, 126, .85); }
+.lightbox img { display: block; max-width: 100%; max-height: calc(96vh - 64px); margin: 0 auto; }
+.lightbox-bar { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); padding: var(--space-2) var(--space-3); font-family: var(--font-mono); font-size: var(--font-size-label); }
+.lightbox-bar .btn { min-height: var(--tap-min); }
+
+/* Ілюстрації: базові кольори (на темно-синьому «екрані») */
+.ill-art { display: block; width: 100%; height: auto; shape-rendering: crispEdges; }
+.ill-art .bg { fill: var(--blue-700); }
+.ill-art .ln { fill: none; stroke: var(--blue-400); stroke-width: 2; }
+.ill-art .ln.faint { stroke: var(--blue-600); }
+.ill-art .bx { fill: var(--blue-600); stroke: var(--blue-200); stroke-width: 2; }
+.ill-art .bx.strong { stroke: var(--white); stroke-width: 3; }
+.ill-art .t { fill: var(--blue-100); font-family: var(--font-mono); font-weight: 600; font-size: 12px; }
+.ill-art .t.big { font-size: 20px; fill: var(--white); }
+.ill-art .t.dim-t { fill: var(--blue-400); font-size: 11px; }
+.ill-art .lamp { fill: var(--blue-400); transition: fill 200ms; }
+.ill-art .on-only { opacity: 0; }
+.fig-ill.on .ill-art .on-only { opacity: 1; }
+.fig-ill.on .ill-art .off-only { opacity: 0; }
+.fig-ill.on .ill-art .lamp { fill: var(--white); }
+
+/* 1. МЕСМ */
+.ill-art .ceil { fill: var(--blue-400); transition: transform 600ms var(--ui-ease); }
+.fig-ill.on .ill-art .ceil { transform: translateY(-14px); }
+.ill-art .heat { fill: none; stroke: var(--blue-200); stroke-width: 2; opacity: 0; shape-rendering: auto; }
+.ill-art .merc { fill: var(--white); transform-box: fill-box; transform-origin: bottom; transform: scaleY(.15); transition: transform 2.4s var(--ui-ease); }
+.ill-art .merc-base { fill: var(--white); }
+.fig-ill.on .ill-art .merc { transform: scaleY(.95); }
+/* 2. Пристрій керування */
+.ill-art .pulse { fill: none; stroke: var(--white); stroke-width: 4; stroke-dasharray: 10 400; stroke-dashoffset: 10; opacity: 0; }
+.ill-art .blk .bx { transition: fill 200ms; }
+.ill-art .baton { stroke: var(--white); stroke-width: 3; transform-box: fill-box; transform-origin: left center; }
+/* 3. «Дніпро» */
+.ill-art .gear { transform-box: fill-box; transform-origin: center; }
+.ill-art .box { fill: var(--blue-200); }
+/* 4. МИР-2 */
+.ill-art .screen { fill: #0f2252; stroke: var(--blue-400); stroke-width: 2; }
+.ill-art .draw { fill: none; stroke: var(--white); stroke-width: 3; stroke-dasharray: 100; stroke-dashoffset: 100; shape-rendering: auto; }
+.fig-ill.on .ill-art .draw { stroke-dashoffset: 0; transition: stroke-dashoffset 2.4s linear .6s; }
+.ill-art .cord, .ill-art .penbody { fill: none; stroke: var(--blue-200); stroke-width: 3; shape-rendering: auto; }
+.ill-art .pentip { fill: var(--white); }
+.ill-art .pen { transition: transform 600ms var(--ui-ease); }
+.fig-ill.on .ill-art .pen { transform: translate(-60px, 6px); }
+/* 5. Адресна мова */
+.ill-art .arrow { fill: var(--white); }
+.ill-art .hop { fill: none; stroke: var(--white); stroke-width: 3; stroke-dasharray: 6 4; opacity: 0; }
+.ill-art .result { opacity: 0; }
+.ill-art .cell .bx { transition: fill 200ms, stroke 200ms; }
+/* 6. Факт чи легенда */
+.ill-art .gray { fill: var(--blue-400); }
+.ill-art .strike { fill: none; stroke: var(--white); stroke-width: 4; stroke-dasharray: 100; stroke-dashoffset: 100; }
+.fig-ill.on .ill-art .strike { stroke-dashoffset: 0; transition: stroke-dashoffset 500ms ease 900ms; }
+.ill-art .stamp { opacity: 0; transform: rotate(-6deg) scale(1.3); transform-box: fill-box; transform-origin: center; transition: opacity 300ms 1.6s, transform 300ms 1.6s; }
+.ill-art .stamp rect { fill: var(--blue-700); stroke: var(--white); stroke-width: 3; }
+.ill-art .stamp-t { fill: var(--white); font-size: 13px; }
+.fig-ill.on .ill-art .stamp { opacity: 1; transform: rotate(-6deg) scale(1); }
+.ill-art .glass { fill: rgba(205, 215, 240, .15); stroke: var(--white); stroke-width: 4; shape-rendering: auto; }
+.ill-art .handle { stroke: var(--white); stroke-width: 7; }
+.ill-art .lens { transition: transform 900ms var(--ui-ease); }
+.fig-ill.on .ill-art .lens { transform: translate(-80px, 42px); }
+.ill-art .tick { fill: none; stroke: var(--white); stroke-width: 3; opacity: 0; transition: opacity 200ms; }
+.fig-ill.on .ill-art .chk .tick { opacity: 1; transition-delay: var(--d); }
+
+/* Нескінченні анімації — лише якщо користувач не просив зменшити рух */
+@media (prefers-reduced-motion: no-preference) {
+  .fig-ill.on .ill-art .lamp { animation: ill-lamp 1.6s steps(1) infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .heat { animation: ill-heat 2.4s ease-in-out infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .pulse { animation: ill-pulse 2.4s linear infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .pulse.loop { animation-duration: 1.4s; }
+  .fig-ill.on .ill-art .blk .bx { animation: ill-blk 2.4s steps(1) infinite; animation-delay: var(--d); }
+  .fig-ill.on .ill-art .baton { animation: ill-baton .6s ease-in-out infinite alternate; }
+  .fig-ill.on .ill-art .gear { animation: ill-spin 2s linear infinite; }
+  .fig-ill.on .ill-art .belt { animation: ill-belt 2s linear infinite; }
+  .fig-ill.on .ill-art .ptr { animation: ill-ptr 4s steps(1) infinite; }
+  .fig-ill.on .ill-art .c3 .bx { animation: ill-c3 4s steps(1) infinite; }
+  .fig-ill.on .ill-art .c5 .bx { animation: ill-c5 4s steps(1) infinite; }
+  .fig-ill.on .ill-art .hop { animation: ill-hop 4s steps(1) infinite; }
+  .fig-ill.on .ill-art .result { animation: ill-result 4s steps(1) infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .fig-ill.on .ill-art .heat, .fig-ill.on .ill-art .hop, .fig-ill.on .ill-art .result { opacity: 1; }
+  .fig-ill.on .ill-art .c5 .bx { fill: var(--blue-400); }
+}
+@keyframes ill-lamp { 0%, 70% { fill: var(--white); } 80% { fill: var(--blue-400); } }
+@keyframes ill-heat { 0% { opacity: 0; transform: translateY(6px); } 50% { opacity: 1; } 100% { opacity: 0; transform: translateY(-10px); } }
+@keyframes ill-pulse { 0% { opacity: 1; stroke-dashoffset: 10; } 25% { opacity: 1; stroke-dashoffset: -110; } 26%, 100% { opacity: 0; stroke-dashoffset: -110; } }
+@keyframes ill-blk { 0% { fill: var(--blue-400); } 25%, 100% { fill: var(--blue-600); } }
+@keyframes ill-baton { to { transform: rotate(-24deg); } }
+@keyframes ill-spin { to { transform: rotate(360deg); } }
+@keyframes ill-belt { from { transform: translateX(-60px); } to { transform: translateX(0); } }
+@keyframes ill-ptr { 0% { transform: none; } 45%, 100% { transform: translateX(144px); } }
+@keyframes ill-c3 { 0% { fill: var(--blue-400); } 40%, 100% { fill: var(--blue-600); } }
+@keyframes ill-c5 { 0%, 45% { fill: var(--blue-600); } 50%, 90% { fill: var(--blue-400); } 95% { fill: var(--blue-600); } }
+@keyframes ill-hop { 0%, 25% { opacity: 0; } 30%, 90% { opacity: 1; } 95% { opacity: 0; } }
+@keyframes ill-result { 0%, 55% { opacity: 0; } 60%, 90% { opacity: 1; } 95% { opacity: 0; } }
+@media (max-width: 767px) {
+  .fig-cap { padding: var(--space-3); }
+}

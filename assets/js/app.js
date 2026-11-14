@@ -108,6 +108,44 @@
     }, { rootMargin: '-45% 0px -50% 0px' }).observe(hero);
   }
 
+  /* ---------- Статті: ілюстрації вмикаються кнопкою, фото збільшуються ---------- */
+
+  $$('.fig-ill').forEach(function (fig) {
+    var btn = $('.ill-toggle', fig);
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var on = !fig.classList.contains('on');
+      fig.classList.toggle('on', on);
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.textContent = btn.getAttribute(on ? 'data-off' : 'data-on');
+    });
+  });
+
+  var zooms = $$('.fig-zoom');
+  if (zooms.length && typeof HTMLDialogElement === 'function') {
+    var box = document.createElement('dialog');
+    box.className = 'lightbox';
+    box.innerHTML = '<div class="lightbox-bar"><span class="lightbox-cap"></span>' +
+      '<button type="button" class="btn btn-ghost lightbox-close"></button></div><img alt="">';
+    document.body.appendChild(box);
+    var bigImg = $('img', box), cap = $('.lightbox-cap', box), closeBtn = $('.lightbox-close', box);
+    closeBtn.textContent = '✕ ' + (t('k16') || 'Закрити');
+    closeBtn.addEventListener('click', function () { box.close(); });
+    // Клік по темному тлу навколо фото теж закриває
+    box.addEventListener('click', function (e) { if (e.target === box) box.close(); });
+    zooms.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var img = $('img', btn);
+        bigImg.src = img.currentSrc || img.src;
+        bigImg.alt = img.alt;
+        var title = $('.wtitle span', btn.closest('.fig'));
+        cap.textContent = title ? title.textContent : '';
+        box.showModal();
+        closeBtn.focus();
+      });
+    });
+  }
+
   /* ---------- Вікно MUSEUM.EXE: «екран», що гортає експонати ---------- */
 
   (function initDecor() {

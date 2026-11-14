@@ -16,6 +16,8 @@ Perhaps you know more? If your family has memories of these people, please share
 
 Kateryna Shkabara worked on one of the most important parts of MESM — the control unit. Picture an orchestra: the musicians play, but someone has to show who comes in and when. The control unit is a kind of conductor inside the computer. It decides which step the machine takes next.
 
+!ill control | Like a conductor, the control unit tells each block of the machine when to come in.
+
 MESM was not her last project. She also joined the work on the next Kyiv computer — the "Kyiv" machine — where she worked on the so-called "group operation".
 
 ## A new machine, a new team
@@ -27,6 +29,8 @@ Two people led the project: Lev Dashevsky and Kateryna Yushchenko. Think about i
 ## Kateryna Yushchenko: how to tell a machine what to do
 
 Kateryna Yushchenko (born Rvachova) was born on 8 December 1919.
+
+!photo stamps-nauka-tse-vona.jpg | A 2021 Ukrainian postage stamp with a portrait of Kateryna Yushchenko | A 2021 Ukrposhta stamp from the series “Science is her” with a portrait of Kateryna Yushchenko. | Ukrposhta, 2021; public domain ([Wikimedia Commons](https://commons.wikimedia.org/wiki/File:UA047-21.jpg))
 
 In 1955, together with V. Korolyuk, she created the Address Language. It is a language a person uses to "explain" to a machine what to do. It is considered one of the first languages of this kind in the world and the first in the USSR. We explain how it works and why it mattered in article 5.
 

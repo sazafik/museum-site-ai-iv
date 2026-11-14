@@ -10,11 +10,15 @@ In 1946, Sergey Lebedev was invited to Kyiv to head the Institute of Electrical 
 
 At the end of 1948, Lebedev took on something new: a machine that could do calculations by itself. An unusual place was found for it — a two-storey building in Feofaniya, a former monastery settlement about 10 kilometres from Kyiv. Twelve engineers worked on the machine together with Lebedev.
 
+!photo feofaniya-lab.jpg | A two-storey red and white brick building in Feofaniya | MESM was assembled in this building in Feofaniya. Modern photo, 2008. | [Олекса-Київ](https://commons.wikimedia.org/wiki/File:DSC08159-%D0%90%D0%BA.%D0%9B%D0%B5%D0%B1%D0%B5%D0%B4%D1%94%D0%B2%D0%B0,19.JPG), CC BY 3.0, Wikimedia Commons
+
 ## A machine the size of a room
 
 The machine was called MESM, the "Small Electronic Calculating Machine". Still, "small" is hardly the right word: it filled a hall of 60 square metres. That is about the size of a small flat.
 
 Inside were about 6,000 glass tubes that did the job today's microchips do. Together they used 25 kilowatts of electricity. When all the tubes were switched on at once, the room turned into real "tropics". To let the heat out, the team had to take the ceiling apart.
+
+!ill mesm | Switch MESM on: about 6,000 tubes heated the hall so much that the ceiling had to be taken apart.
 
 The team worked almost without rest. Lebedev stayed in the lab for several days in a row, keeping himself going with strong tea. His colleague Zinoviy Rabinovich actually lived in the lab and went home only at weekends.
 

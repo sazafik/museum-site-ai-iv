@@ -8,6 +8,7 @@
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
+const ILL = require('./illustrations.js');
 
 const ROOT = path.resolve(__dirname, '..');
 const SITE = 'Software and Computer Museum';
@@ -32,6 +33,8 @@ const LOCALES = {
     listLead: "Історії про перші комп'ютери України: хто їх створював, як вони працювали і як відрізнити факт від легенди. Читайте по черзі — кожна наступна стаття спирається на попередню.",
     listDescription: "Статті про перші комп'ютери України для школярів, батьків і дорослих.",
     listPageTitle: 'Статті',
+    illOn: '▶ Увімкнути', illOff: '■ Вимкнути',
+    zoom: 'Збільшити фото', photoBy: 'Фото',
   },
   en: {
     dir: 'articles/en',
@@ -48,6 +51,8 @@ const LOCALES = {
     listLead: "Stories about Ukraine's first computers: who built them, how they worked and how to tell fact from legend. Read them in order — each article builds on the one before.",
     listDescription: "Articles about Ukraine's first computers for schoolchildren, parents and adults.",
     listPageTitle: 'Articles',
+    illOn: '▶ Turn on', illOff: '■ Turn off',
+    zoom: 'Enlarge photo', photoBy: 'Photo',
   },
 };
 
@@ -67,6 +72,8 @@ function cut(re, what) {
 const SPRITE = cut(/<svg width="0"[\s\S]*?<\/svg>/, 'спрайт піктограм');
 const HEADER = cut(/<header class="hdr">[\s\S]*?<\/header>/, 'шапку');
 const FOOTER = cut(/<footer class="ftr"[\s\S]*?<\/footer>/, 'підвал');
+// Версія для скидання кешу стилів і скриптів — та сама, що в index.html
+const VER = (index.match(/site\.css\?v=([\w-]+)/) || [])[1] || '1';
 
 // Підставляє тексти потрібної мови в елементи з data-i18n / data-i18n-attr
 function translate(html, lang) {
@@ -105,7 +112,8 @@ function plain(s) {
   return s.replace(/\[([^\]]+)\]\([^)]*\)/g, '$1').replace(/\*\*?/g, '');
 }
 
-// Розбирає Markdown на блоки: h1, h2, p, quote, ul, ol, hr
+// Розбирає Markdown на блоки: h1, h2, p, quote, ul, ol, hr,
+// а також «!ill назва | підпис» (інтерактивна ілюстрація) і «!photo файл | alt | підпис | автор і ліцензія» (фото)
 function parse(md) {
   const blocks = [];
   let para = null;
@@ -117,6 +125,13 @@ function parse(md) {
     if (!line.trim()) { flush(); continue; }
     if ((m = line.match(/^(#{1,2}) (.*)$/))) { flush(); blocks.push({ t: m[1].length === 1 ? 'h1' : 'h2', text: m[2] }); continue; }
     if (/^---+$/.test(line)) { flush(); blocks.push({ t: 'hr' }); continue; }
+    if ((m = line.match(/^!ill (\w+)\s*\|\s*(.*)$/))) { flush(); blocks.push({ t: 'ill', name: m[1], caption: m[2] }); continue; }
+    if ((m = line.match(/^!photo (\S+)\s*\|(.*)$/))) {
+      flush();
+      const [alt, caption, credit] = m[2].split('|').map(x => x.trim());
+      blocks.push({ t: 'photo', file: m[1], alt, caption, credit });
+      continue;
+    }
     if ((m = line.match(/^> ?(.*)$/))) { flush(); blocks.push({ t: 'quote', text: m[1] }); continue; }
     if ((m = line.match(/^- (.*)$/)) || (m = line.match(/^\d+\. (.*)$/))) {
       const type = /^- /.test(line) ? 'ul' : 'ol';
@@ -133,7 +148,28 @@ function parse(md) {
   return blocks;
 }
 
-function render(b) {
+const wctl = '<span class="wctl"><span></span><span></span><span></span></span>';
+function render(b, ctx = {}) {
+  if (b.t === 'ill') {
+    const L = LOCALES[ctx.lang];
+    const draw = ILL[b.name];
+    if (!draw) throw new Error(`Немає ілюстрації «${b.name}» у tools/illustrations.js`);
+    return `<figure class="win fig fig-ill">
+          <div class="wtitle" aria-hidden="true"><span>${b.name.toUpperCase()}.EXE</span>${wctl}</div>
+          <div class="fig-body">${draw((uk, en) => esc(ctx.lang === 'en' ? en : uk))}</div>
+          <figcaption class="fig-cap"><button type="button" class="btn btn-ghost ill-toggle" aria-pressed="false" data-on="${esc(L.illOn)}" data-off="${esc(L.illOff)}">${esc(L.illOn)}</button><span>${inline(b.caption)}</span></figcaption>
+        </figure>`;
+  }
+  if (b.t === 'photo') {
+    const L = LOCALES[ctx.lang];
+    const src = `${ctx.base}assets/img/articles/${b.file}`;
+    const name = b.file.replace(/\.\w+$/, '').toUpperCase().replace(/-/g, '_') + '.JPG';
+    return `<figure class="win fig fig-photo">
+          <div class="wtitle" aria-hidden="true"><span>${esc(name)}</span>${wctl}</div>
+          <button type="button" class="fig-zoom" aria-label="${esc(L.zoom)}: ${esc(b.alt)}"><img src="${src}" alt="${esc(b.alt)}" loading="lazy" decoding="async"></button>
+          <figcaption class="fig-cap"><span>${inline(b.caption)}</span>${b.credit ? `<span class="credit">${esc(L.photoBy)}: ${inline(b.credit)}</span>` : ''}</figcaption>
+        </figure>`;
+  }
   if (b.t === 'p') return `<p>${inline(b.text)}</p>`;
   if (b.t === 'ul' || b.t === 'ol') return `<${b.t}>\n${b.items.map(i => `  <li>${inline(i)}</li>`).join('\n')}\n</${b.t}>`;
   if (b.t === 'h2') return `<h2>${inline(b.text)}</h2>`;
@@ -157,8 +193,9 @@ function readArticle(lang, file) {
 }
 
 // Ділить статтю на основний текст, «вікна»-блоки й джерела
-function articleBody(a) {
+function articleBody(a, ctx) {
   const L = LOCALES[a.lang];
+  const r = b => render(b, ctx);
   const main = [];
   const notes = [];
   let sources = null;
@@ -179,14 +216,14 @@ function articleBody(a) {
         <div class="wtitle" aria-hidden="true"><span>${esc(file)}</span><span class="wctl"><span></span><span></span><span></span></span></div>
         <div class="winbody">
           <h2 class="h4"><svg class="ic i-m" aria-hidden="true"><use href="#${n.icon}"/></svg>${esc(n.title)}</h2>
-          ${n.blocks.map(render).join('\n          ')}
+          ${n.blocks.map(r).join('\n          ')}
         </div>
       </aside>`;
   }).join('\n');
   return {
-    main: main.map(render).join('\n        '),
+    main: main.map(r).join('\n        '),
     notes: notesHtml,
-    sources: sources ? sources.blocks.map(render).join('\n        ') : '',
+    sources: sources ? sources.blocks.map(r).join('\n        ') : '',
   };
 }
 
@@ -203,9 +240,9 @@ function page({ lang, base, title, description, alternates, body }) {
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
 ${alt}
-  <link rel="stylesheet" href="${base}assets/css/fonts.css?v=20261114e">
-  <link rel="stylesheet" href="${base}assets/css/tokens.css?v=20261114e">
-  <link rel="stylesheet" href="${base}assets/css/site.css?v=20261114e">
+  <link rel="stylesheet" href="${base}assets/css/fonts.css?v=${VER}">
+  <link rel="stylesheet" href="${base}assets/css/tokens.css?v=${VER}">
+  <link rel="stylesheet" href="${base}assets/css/site.css?v=${VER}">
 </head>
 <body id="top">
 <!-- Згенеровано tools/build-articles.js — не редагуйте вручну, змінюйте .md-файли в articles/ -->
@@ -222,9 +259,9 @@ ${body}
 
 ${chrome(FOOTER, base, lang)}
 
-<script src="${base}assets/js/content.uk.js?v=20261114e"></script>
-<script src="${base}assets/js/content.en.js?v=20261114e"></script>
-<script src="${base}assets/js/app.js?v=20261114e"></script>
+<script src="${base}assets/js/content.uk.js?v=${VER}"></script>
+<script src="${base}assets/js/content.en.js?v=${VER}"></script>
+<script src="${base}assets/js/app.js?v=${VER}"></script>
 </body>
 </html>
 `;
@@ -241,7 +278,7 @@ function articleHref(fromLang, toLang, slug) {
 function articlePage(a, prev, next, langsWithSlug) {
   const L = LOCALES[a.lang];
   const base = a.lang === 'en' ? '../../' : '../';
-  const body = articleBody(a);
+  const body = articleBody(a, { lang: a.lang, base });
   const alternates = {};
   for (const l of langsWithSlug) alternates[l] = articleHref(a.lang, l, a.slug);
   const pager = [

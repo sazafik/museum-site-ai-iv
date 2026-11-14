@@ -10,6 +10,8 @@ In 1954, the Institute of Mathematics of the Ukrainian Academy of Sciences began
 
 The initiative came from the mathematician Boris Gnedenko. The machine was built by almost the same team that had created Kyiv's first machine, MESM. The work was led by Lev Dashevsky and Kateryna Yushchenko, and from 1956–1957 by Viktor Glushkov. We told the story of Kateryna Yushchenko in article 2.
 
+!photo glushkov-envelope.jpg | A 1983 postal envelope with a portrait of academician Viktor Glushkov | Viktor Glushkov, who led the work on the Kyiv from 1956–1957, on a 1983 postal envelope. | Artist P. Bendel, 1983; public domain ([Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Victor_Glushkov_envelope.jpg))
+
 The "Kyiv" was much more powerful than MESM. It had 2,400 glass tubes and another 15,000 smaller parts. In one second, the machine could do up to 12,000 additions — MESM managed only 50 operations. Tasks were fed into the machine from a paper tape with holes punched in it.
 
 From 1956 to 1962, the "Kyiv" worked at the Kyiv Computing Centre. A second copy of the machine worked at the Joint Institute for Nuclear Research in Dubna.
@@ -25,6 +27,8 @@ A computer is exactly that kind of "cook". A programming language is the languag
 In 1955, Kateryna Yushchenko and V. Korolyuk created the Address Language. It is considered one of the first languages of this kind in the world and the first in the USSR.
 
 Where does the name come from? A machine keeps numbers in its memory like items in a left-luggage room. Every locker has its own number — an address. The main idea of the Address Language is not only to take a number from the right locker, but also to store the address of another locker inside one. It is like a reference in a book: "see the address on another page".
+
+!ill address | The key idea of the Address Language: the machine takes an address from a cell and follows it to the number it needs.
 
 The Address Language was used not only on the "Kyiv". It was also used on other computers of the time — the M-20, the "Ural", the "Minsk" and the "Dnipro". So an idea from Kyiv worked far beyond Ukraine.
 

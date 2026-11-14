@@ -16,6 +16,8 @@ The first step was the "Promin" — a small computer for engineering calculation
 
 According to Glushkov, the "Promin" was created in just eight months. From 1963 it was produced at a factory in Sievierodonetsk.
 
+!photo kpi-museum-promin.jpg | The console of the Promin computer with a display panel and number keys | The console of the Promin computer at the KPI Polytechnic Museum in Kyiv. | [Ilya, Wikimedia Ukraine](https://commons.wikimedia.org/wiki/File:KPI_Polytechnic_Museum_DSC_0088.jpg), CC BY-SA 3.0, Wikimedia Commons
+
 The "Promin" could perform 32 different operations. The memory where the machine keeps numbers while it calculates had only 100 "cells". For comparison: a modern laptop has so many of these cells that you could never count them.
 
 The "Promin" also worked with metallised cards — not the usual paper ones, but cards with a metal coating.
@@ -33,6 +35,8 @@ Still, it was not "personal" in today's sense: the MIR-1 weighed about 400 kilog
 The MIR-2 appeared in 1969. It performed up to 12,000 operations a second. But the main thing was something else: it had a screen and a light pen.
 
 So an engineer could work with the machine in a dialogue — through the screen and the light pen. For the late 1960s, that was a real wonder. The language the MIR-2 "spoke" was called "Analitik" (Analyst) — read about it in article 5.
+
+!ill mir2 | The MIR-2 with a screen and a light pen: the engineer works with the machine in dialogue.
 
 Later the MIR-3 appeared as well. However, sources give different years for its appearance and different speeds, so historians still have work to do here.
 

@@ -10,6 +10,8 @@ Back then computers were called EOM — "electronic computing machines". The fir
 
 A computer that controls works differently. It keeps an eye on equipment and gives it commands by itself: switch on, stop, change speed. That is the kind of computer a factory needs.
 
+!ill dnipro | The Dnipro doesn’t just calculate: it gives commands to equipment — start, stop, change speed.
+
 ## An idea born at a conference
 
 In June 1958, at a conference in Kyiv, Viktor Glushkov proposed building a universal computer for control. In other words, one that could be adapted to many different kinds of production.
@@ -25,6 +27,8 @@ A little over three years passed from the idea to the finished machine. On 9 Dec
 A dedicated plant was built for it in Kyiv — the Kyiv OKM plant, later known as "Elektronmash". It was built at the same time as the "Dnipro" itself was being developed. From 1962 to 1970, the plant turned out the machines by the hundreds rather than one at a time.
 
 Over ten years, more than 500 "Dnipros" were made. Most of them worked outside Ukraine — mainly in Russia.
+
+!photo dnipro-computer.jpg | Cabinets of a Dnipro computer with modules, a console and a tape reel in a museum hall | A Dnipro computer built in 1971, now in a museum. | [Nikolay Omonov](https://commons.wikimedia.org/wiki/File:Dnieper_computer_1971_01.jpg), CC BY-SA 4.0, Wikimedia Commons
 
 ## Smaller, but faster
 
