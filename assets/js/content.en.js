@@ -148,6 +148,13 @@ window.SCM_CONTENT.en = {
   "k145": "C:\\MUSEUM> exit",
   "k146": "You can see all of these exhibits in person on the overview tour.",
   "k147": "6 exhibits from the 1980s–90s — from the Vectrex to the Apple MessagePad",
+  "k150": "C:\\MUSEUM> what next?",
+  "k151": "Request",
+  "k152": "Choose a tour or course and leave your name and phone.",
+  "k153": "Call",
+  "k154": "We'll call you to agree on a date and time together.",
+  "k155": "Visit",
+  "k156": "Come to the museum at the agreed time.",
   "k149": "exhibit {n} of {m} · hover to pause",
   "k148": "Articles",
   "dirLabels": {

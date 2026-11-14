@@ -427,6 +427,23 @@ select.field { padding-right: var(--space-12); cursor: pointer; }
   .mmenu { display: none; }
 }
 
+/* Вікно запису: під формою — «що далі?», щоб не лишалося порожнього місця */
+.win-booking .winbody { display: flex; flex-direction: column; gap: var(--space-8); flex-grow: 1; }
+.steps { margin-top: auto; display: flex; flex-direction: column; gap: var(--space-4);
+  padding-top: var(--space-6); border-top: var(--stroke) dashed var(--decor-line); }
+.steps-title { margin: 0; font-size: var(--font-size-prompt-mobile); line-height: var(--line-height-prompt-mobile); color: var(--text-secondary); }
+.steps-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); counter-reset: none; }
+.step { position: relative; display: flex; flex-direction: column; gap: var(--space-2);
+  padding: var(--space-4); background: var(--bg); border: var(--stroke) solid var(--border); }
+.step-num { position: absolute; top: calc(var(--stroke) * -1); right: calc(var(--stroke) * -1); padding: 0 var(--space-2);
+  background: var(--window-titlebar); color: var(--window-titlebar-text);
+  font-family: var(--font-mono); font-weight: 600; font-size: var(--font-size-titlebar); line-height: var(--line-height-titlebar); }
+.step-ic { color: var(--text); }
+.step-text { font-size: var(--font-size-caption); line-height: var(--line-height-caption); }
+@media (max-width: 767px) {
+  .steps-list { grid-template-columns: minmax(0, 1fr); }
+}
+
 /* ===== Інтерактивність: ретро-ефекти наведення й натискання =====
    Кольори й зсуви — лише з токенів. Тривалості анімацій (у токенах їх немає) задано тут. */
 :root { --ui-fast: 140ms; --ui-mid: 220ms; --ui-ease: cubic-bezier(.2, .8, .2, 1); --lift: calc(var(--press-offset) * -1); }
@@ -513,3 +530,6 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+/* Контакти: карта забирає вільну висоту, щоб вікно не мало порожнього низу */
+#contacts .contacts-body { flex-grow: 1; }
+#contacts .ph-map { flex-grow: 1; min-height: 0; }
