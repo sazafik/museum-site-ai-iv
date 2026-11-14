@@ -75,8 +75,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .two { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-6); align-items: start; }
 /* Запис і контакти — вікна однакової висоти */
 #booking .two { align-items: stretch; }
-.hero-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-12); align-items: center; }
-.hero-text { display: flex; flex-direction: column; gap: var(--space-6); }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-12); align-items: stretch; }
+.hero-text { display: flex; flex-direction: column; justify-content: space-between; gap: var(--space-6); } /* верх і низ тексту — на рівні вікна MUSEUM.EXE */
 .hero-text .lead { max-width: calc(var(--measure) * 0.6); }
 .hero-btns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-4); max-width: var(--actions-max); margin-top: var(--space-4); }
 .ftr-grid { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 3fr) minmax(0, 3fr) minmax(0, 2fr); gap: var(--space-8); }
@@ -201,7 +201,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
 .card p { margin: 0; }
 
 /* Декоративне вікно MUSEUM.EXE на першому екрані */
-.decor-body { display: flex; flex-direction: column; gap: var(--space-6); padding: var(--space-6); }
+.decor-body { display: flex; flex-direction: column; gap: var(--space-4); padding: var(--space-6); }
 .decor-screen {
   display: flex; align-items: center; justify-content: center;
   height: calc(var(--space-24) + var(--space-16) + var(--space-2));
@@ -514,7 +514,7 @@ a.btn[href="#booking"]:hover, a.btn[href="#booking"]:focus-visible { padding-rig
 .card:hover .wctl span:last-child { transform: scale(1.2); }
 /* Фото експонатів плавно наближаються */
 .ph-photo img { transition: transform 450ms var(--ui-ease), filter 450ms var(--ui-ease); }
-.card-exhibit:hover .ph-photo img { transform: scale(1.06); }
+.card-exhibit:hover .ph-photo img { filter: brightness(1.06); } /* без збільшення — щоб фото не обрізалося */
 }
 
 /* Підвал: посилання з анімованим підкресленням і зсувом */
@@ -575,8 +575,8 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
 .fig-ill.on .ill-toggle { background: var(--button); color: var(--button-text); }
 /* Фото: натисніть, щоб збільшити */
 .fig-zoom { display: block; width: 100%; padding: 0; border: 0; background: var(--blue-700); cursor: zoom-in; overflow: hidden; }
-.fig-zoom img { display: block; width: 100%; max-height: 520px; object-fit: contain; transition: transform 450ms var(--ui-ease); }
-@media (hover: hover) { .fig-zoom:hover img { transform: scale(1.03); } }
+.fig-zoom img { display: block; width: 100%; max-height: 520px; object-fit: contain; transition: filter 300ms; }
+@media (hover: hover) { .fig-zoom:hover img { filter: brightness(1.06); } }
 .lightbox { max-width: min(96vw, 1400px); max-height: 96vh; padding: 0; border: var(--stroke) solid var(--white); background: var(--blue-700); color: var(--white); box-shadow: var(--shadow-window); }
 .lightbox::backdrop { background: rgba(35, 58, 126, .85); }
 .lightbox img { display: block; max-width: 100%; max-height: calc(96vh - 64px); margin: 0 auto; }
@@ -744,8 +744,8 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
 
 /* Обкладинки карток статей: ілюстрація «вмикається», коли наводите на картку */
 .card-cover { border-bottom: var(--stroke) solid var(--border); background: var(--blue-700); overflow: hidden; }
-.card-cover .ill-art { transition: transform 450ms var(--ui-ease); }
-@media (hover: hover) { .card:hover .card-cover .ill-art { transform: scale(1.04); } }
+.card-cover .ill-art { transition: filter 300ms; }
+@media (hover: hover) { .card:hover .card-cover .ill-art { filter: brightness(1.12); } }
 
 /* Фото експонатів збільшуються по кліку */
 .ph-photo.zoomable { cursor: zoom-in; }
