@@ -23,7 +23,7 @@ window.SCM_CONTENT.en = {
   "k20": "A journey from the first personal computers to modern software that you can see, hear and try for yourself.",
   "k21": "MUSEUM.EXE",
   "k22": "C:\\MUSEUM> dir\nTOURS        <DIR>\nEXHIBITS     <DIR>\nCOURSES      <DIR>",
-  "k23": "exhibit 1 of 6 · hover to pause",
+  "k23": "1 / 6 · hover to pause",
   "k24": "C:\\MUSEUM> dir /tours",
   "k25": "A guide will take you from room-sized mainframes to home computers and game consoles. Choose a format, and we will find a convenient time together.",
   "k26": "TOUR_01.EXE",
@@ -155,7 +155,7 @@ window.SCM_CONTENT.en = {
   "k154": "We'll call you to agree on a date and time together.",
   "k155": "Visit",
   "k156": "Come to the museum at the agreed time.",
-  "k149": "exhibit {n} of {m} · hover to pause",
+  "k149": "{n} / {m} · hover to pause",
   "k148": "Articles",
   "dirLabels": {
     "t1": "tour “Overview: from mainframe to smartphone”",

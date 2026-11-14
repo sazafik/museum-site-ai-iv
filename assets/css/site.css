@@ -542,3 +542,23 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
   .g3:has(> .card .facts) .facts { grid-row: span 3; grid-template-rows: subgrid; row-gap: var(--space-3); }
   .g3:has(> .card .facts) .card .btn { align-self: end; }
 }
+
+/* ===== Єдине вирівнювання по центру ===== */
+/* Заголовки розділів (головна і список статей) — по центру, як і блоки кнопок під картками */
+.sec-head { align-items: center; text-align: center; }
+.sec-head .lead { margin-left: auto; margin-right: auto; }
+/* Сторінка статті: шапка і текст — однією колонкою по центру сторінки */
+.art { margin-left: auto; margin-right: auto; width: 100%; }
+.art-head .sec-head { align-items: flex-start; text-align: left; max-width: var(--actions-max); margin-left: auto; margin-right: auto; }
+.art-head .wrap > .back, .art-head .wrap > :not(.sec-head) { max-width: var(--actions-max); margin-left: auto; margin-right: auto; }
+/* Кнопка «Прокласти маршрут»: текст по центру */
+.contacts-body .btn { text-align: center; }
+/* Лічильник у вікні MUSEUM.EXE — дрібніше, щоб не виходив за край */
+.decor-count { font-size: var(--font-size-label); }
+/* Картки статей: рік, заголовок, анонс і кнопка на одному рівні в ряду */
+@supports (grid-template-rows: subgrid) {
+  .g3:has(> .card-article) { row-gap: var(--space-6); }
+  .g3:has(> .card-article) > .card { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; }
+  .g3:has(> .card-article) > .card > .winbody { display: grid; grid-row: span 4; grid-template-rows: subgrid; row-gap: var(--space-4); }
+  .g3:has(> .card-article) .card .btn { align-self: end; }
+}
