@@ -391,6 +391,81 @@ select.field { padding-right: var(--space-12); cursor: pointer; }
   .mmenu { display: none; }
 }
 
+/* ===== Інтерактивність: ретро-ефекти наведення й натискання =====
+   Кольори й зсуви — лише з токенів. Тривалості анімацій (у токенах їх немає) задано тут. */
+:root { --ui-fast: 140ms; --ui-mid: 220ms; --ui-ease: cubic-bezier(.2, .8, .2, 1); --lift: calc(var(--press-offset) * -1); }
+
+/* Кнопки: при наведенні «піднімаються» над тінню, при натисканні — вдавлюються */
+.btn {
+  position: relative; overflow: hidden;
+  transition: transform var(--ui-fast) var(--ui-ease), box-shadow var(--ui-fast) var(--ui-ease),
+              background-color var(--ui-fast), color var(--ui-fast), border-color var(--ui-fast);
+}
+.btn:not([aria-disabled="true"]):not(.burger):hover,
+.btn:not([aria-disabled="true"]):not(.burger):focus-visible {
+  transform: translate(var(--lift), var(--lift));
+  box-shadow: calc(var(--press-offset) * 2) calc(var(--press-offset) * 2) 0 0 var(--border);
+}
+.btn:not([aria-disabled="true"]):active { transform: translate(var(--press-offset), var(--press-offset)); box-shadow: var(--shadow-none); transition-duration: 60ms; }
+/* Відблиск, що пробігає по кнопці */
+.btn::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: -60%; width: 40%;
+  background: linear-gradient(90deg, transparent, var(--blue-200), transparent); opacity: 0; pointer-events: none;
+  transform: skewX(-20deg);
+}
+.btn:not([aria-disabled="true"]):hover::before { animation: btn-shine 650ms var(--ui-ease) 1; }
+@keyframes btn-shine { 0% { left: -60%; opacity: .55; } 100% { left: 130%; opacity: 0; } }
+/* «Записатися»: стрілка виїжджає при наведенні */
+a.btn[href="#booking"]::after {
+  content: "→"; display: inline-block; max-width: 0; opacity: 0; overflow: hidden;
+  transform: translateX(calc(var(--space-2) * -1));
+  transition: max-width var(--ui-mid) var(--ui-ease), opacity var(--ui-mid), transform var(--ui-mid) var(--ui-ease);
+}
+a.btn[href="#booking"]:hover::after, a.btn[href="#booking"]:focus-visible::after { max-width: 2ch; opacity: 1; transform: none; }
+/* Іконки в кнопках трохи підстрибують */
+.btn .ic { transition: transform var(--ui-mid) var(--ui-ease); }
+.btn:hover .ic { transform: translateY(var(--lift)); }
+
+/* Навігація в шапці: підкреслення «малюється» зліва направо, з'являється курсор > */
+.nl { position: relative; text-decoration: none; background-image: linear-gradient(currentColor, currentColor);
+  background-repeat: no-repeat; background-position: 0 calc(100% - var(--space-2)); background-size: 0 var(--stroke);
+  transition: background-size var(--ui-mid) var(--ui-ease), color var(--ui-fast); }
+.nl:hover, .nl:focus-visible { text-decoration: none; background-size: 100% var(--stroke); }
+.nl::before { content: ">"; display: inline-block; max-width: 0; opacity: 0; overflow: hidden;
+  transition: max-width var(--ui-mid) var(--ui-ease), opacity var(--ui-fast); }
+.nl:hover::before, .nl:focus-visible::before { max-width: 1ch; opacity: 1; }
+
+/* Перемикач мови */
+.lang { transition: background-color var(--ui-fast), color var(--ui-fast), box-shadow var(--ui-fast), transform var(--ui-fast) var(--ui-ease); }
+.lang[aria-pressed="false"]:hover { transform: translate(var(--lift), var(--lift)); box-shadow: inset 0 0 0 var(--stroke) var(--border), var(--shadow-button); }
+.lang:active { transform: translate(var(--press-offset), var(--press-offset)); box-shadow: var(--shadow-none); }
+
+/* Картки-вікна: при наведенні піднімаються, рядок заголовка стає яскравішим, кнопки вікна «світяться» */
+.card { transition: transform var(--ui-mid) var(--ui-ease), box-shadow var(--ui-mid) var(--ui-ease); }
+@media (hover: hover) {
+.card:hover, .card:focus-within {
+  transform: translate(var(--lift), var(--lift));
+  box-shadow: calc(var(--press-offset) * 3) calc(var(--press-offset) * 3) 0 0 var(--border);
+}
+.card .wtitle { transition: background-color var(--ui-mid); }
+.card:hover .wtitle, .card:focus-within .wtitle { background: var(--blue-600); }
+.card .wctl span { transition: background-color var(--ui-fast); }
+.card:hover .wctl span:last-child { background: var(--window-titlebar-text); }
+/* Фото експонатів плавно наближаються */
+.ph-photo img { transition: transform 450ms var(--ui-ease), filter 450ms var(--ui-ease); }
+.card-exhibit:hover .ph-photo img { transform: scale(1.06); }
+}
+
+/* Підвал: посилання з анімованим підкресленням і зсувом */
+.ftr-nav .ftr-link { align-self: flex-start; transition: transform var(--ui-mid) var(--ui-ease), text-decoration-thickness var(--ui-fast); }
+.ftr-nav .ftr-link::before { content: ">"; display: inline-block; max-width: 0; opacity: 0; overflow: hidden; margin-right: 0;
+  transition: max-width var(--ui-mid) var(--ui-ease), opacity var(--ui-fast), margin var(--ui-mid); }
+.ftr-nav .ftr-link:hover, .ftr-nav .ftr-link:focus-visible { transform: translateX(var(--space-1)); text-decoration-thickness: var(--stroke-strong); }
+.ftr-nav .ftr-link:hover::before, .ftr-nav .ftr-link:focus-visible::before { max-width: 1ch; opacity: 1; margin-right: var(--space-1); }
+a.ftr-link[href^="tel:"] { transition: transform var(--ui-fast) var(--ui-ease); }
+a.ftr-link[href^="tel:"]:hover { transform: translateX(var(--space-1)); }
+a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2); }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
