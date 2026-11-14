@@ -231,6 +231,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   background-color: var(--card-surface);
   background-image: linear-gradient(var(--decor-line) var(--stroke), transparent var(--stroke)), linear-gradient(90deg, var(--decor-line) var(--stroke), transparent var(--stroke));
   background-size: var(--space-6) var(--space-6);
+  overflow: hidden;
   color: var(--text);
 }
 .ph-photo { aspect-ratio: 4 / 3; border-bottom: var(--stroke) solid var(--border); }
