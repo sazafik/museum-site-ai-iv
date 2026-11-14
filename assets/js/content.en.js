@@ -23,7 +23,7 @@ window.SCM_CONTENT.en = {
   "k20": "A journey from the first personal computers to modern software that you can see, hear and try for yourself.",
   "k21": "MUSEUM.EXE",
   "k22": "C:\\MUSEUM> dir\nTOURS        <DIR>\nEXHIBITS     <DIR>\nCOURSES      <DIR>",
-  "k23": "3 directions · 1 booking form",
+  "k23": "exhibit 1 of 6 · hover to pause",
   "k24": "C:\\MUSEUM> dir /tours",
   "k25": "A guide will take you from room-sized mainframes to home computers and game consoles. Choose a format, and we will find a convenient time together.",
   "k26": "TOUR_01.EXE",
@@ -148,6 +148,7 @@ window.SCM_CONTENT.en = {
   "k145": "C:\\MUSEUM> exit",
   "k146": "You can see all of these exhibits in person on the overview tour.",
   "k147": "6 exhibits from the 1980s–90s — from the Vectrex to the Apple MessagePad",
+  "k149": "exhibit {n} of {m} · hover to pause",
   "k148": "Articles",
   "dirLabels": {
     "t1": "tour “Overview: from mainframe to smartphone”",

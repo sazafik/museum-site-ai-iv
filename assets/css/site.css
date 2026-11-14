@@ -200,6 +200,35 @@ a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible
   border: var(--stroke) solid var(--decor-line); color: var(--text);
 }
 .decor-screen .ic { width: calc(var(--icon-xxl) * 2.5); height: calc(var(--icon-xxl) * 2.5); }
+/* «Екран» з фото експонатів: рядки розгортки, віньєтка, рік у кутку */
+.decor-screen { position: relative; overflow: hidden; height: auto; aspect-ratio: 4 / 3; background: var(--blue-700); }
+.decor-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(.85) contrast(1.05); }
+.decor-scan {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(35, 58, 126, .28) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 55%, rgba(35, 58, 126, .55) 100%);
+}
+.decor-year {
+  position: absolute; left: var(--space-3); bottom: var(--space-3); padding: 0 var(--space-2);
+  background: var(--blue-700); color: var(--white); border: var(--stroke) solid var(--white);
+  font-weight: 600; font-size: var(--font-size-label); line-height: var(--line-height-label);
+}
+.decor-cursor { animation: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .decor-cursor { animation: blink 1.1s steps(1) infinite; }
+  /* Новий кадр «прорисовується» зверху вниз, як на старому моніторі */
+  .decor.is-switching .decor-next { animation: decor-wipe 520ms steps(10) both; }
+  .decor-screen::after {
+    content: ""; position: absolute; left: 0; right: 0; top: -20%; height: 20%; pointer-events: none;
+    background: linear-gradient(transparent, rgba(205, 215, 240, .14), transparent);
+    animation: decor-roll 6s linear infinite;
+  }
+  .decor.is-paused .decor-screen::after { animation-play-state: paused; }
+}
+@keyframes decor-wipe { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0); } }
+@keyframes decor-roll { to { top: 100%; } }
+.decor.is-paused .wctl span:first-child { background: var(--window-titlebar-text); }
 .decor-pre { margin: 0; font-size: var(--font-size-prompt); line-height: var(--line-height-prompt); color: var(--text); white-space: pre; }
 .cursor { display: inline-block; width: .6em; height: 1.1em; margin-left: var(--space-1); vertical-align: text-bottom; background: currentColor; }
 @media (prefers-reduced-motion: no-preference) {
@@ -395,7 +424,8 @@ select.field { padding-right: var(--space-12); cursor: pointer; }
    Кольори й зсуви — лише з токенів. Тривалості анімацій (у токенах їх немає) задано тут. */
 :root { --ui-fast: 140ms; --ui-mid: 220ms; --ui-ease: cubic-bezier(.2, .8, .2, 1); --lift: calc(var(--press-offset) * -1); }
 
-/* Кнопки: при наведенні «піднімаються» над тінню, при натисканні — вдавлюються */
+/* Кнопки: при наведенні тінь стає глибшою (кнопка «піднімається»), при натисканні — вдавлюються.
+   Саму кнопку при наведенні НЕ зсуваємо: інакше курсор біля краю «вилітає» з неї і ефект циклічно смикається. */
 .btn {
   position: relative; overflow: hidden;
   transition: transform var(--ui-fast) var(--ui-ease), box-shadow var(--ui-fast) var(--ui-ease),
@@ -403,7 +433,6 @@ select.field { padding-right: var(--space-12); cursor: pointer; }
 }
 .btn:not([aria-disabled="true"]):not(.burger):hover,
 .btn:not([aria-disabled="true"]):not(.burger):focus-visible {
-  transform: translate(var(--lift), var(--lift));
   box-shadow: calc(var(--press-offset) * 2) calc(var(--press-offset) * 2) 0 0 var(--border);
 }
 .btn:not([aria-disabled="true"]):active { transform: translate(var(--press-offset), var(--press-offset)); box-shadow: var(--shadow-none); transition-duration: 60ms; }
@@ -416,12 +445,16 @@ select.field { padding-right: var(--space-12); cursor: pointer; }
 .btn:not([aria-disabled="true"]):hover::before { animation: btn-shine 650ms var(--ui-ease) 1; }
 @keyframes btn-shine { 0% { left: -60%; opacity: .55; } 100% { left: 130%; opacity: 0; } }
 /* «Записатися»: стрілка виїжджає при наведенні */
+a.btn[href="#booking"] { transition: transform var(--ui-fast) var(--ui-ease), box-shadow var(--ui-fast) var(--ui-ease),
+  background-color var(--ui-fast), color var(--ui-fast), border-color var(--ui-fast), padding var(--ui-mid) var(--ui-ease); }
 a.btn[href="#booking"]::after {
-  content: "→"; display: inline-block; max-width: 0; opacity: 0; overflow: hidden;
-  transform: translateX(calc(var(--space-2) * -1));
-  transition: max-width var(--ui-mid) var(--ui-ease), opacity var(--ui-mid), transform var(--ui-mid) var(--ui-ease);
+  content: "→"; position: absolute; right: var(--space-2); top: 50%; opacity: 0;
+  transform: translate(calc(var(--space-2) * -1), -50%);
+  transition: opacity var(--ui-mid), transform var(--ui-mid) var(--ui-ease);
 }
-a.btn[href="#booking"]:hover::after, a.btn[href="#booking"]:focus-visible::after { max-width: 2ch; opacity: 1; transform: none; }
+a.btn[href="#booking"]:hover::after, a.btn[href="#booking"]:focus-visible::after { opacity: 1; transform: translate(0, -50%); }
+a.btn[href="#booking"]:hover, a.btn[href="#booking"]:focus-visible { padding-right: calc(var(--space-6) + var(--space-2)); padding-left: calc(var(--space-6) - var(--space-2)); }
+.hdr-actions a.btn[href="#booking"]:hover, .hdr-actions a.btn[href="#booking"]:focus-visible { padding-right: calc(var(--space-4) + var(--space-2)); padding-left: calc(var(--space-4) - var(--space-2)); }
 /* Іконки в кнопках трохи підстрибують */
 .btn .ic { transition: transform var(--ui-mid) var(--ui-ease); }
 .btn:hover .ic { transform: translateY(var(--lift)); }
@@ -431,17 +464,21 @@ a.btn[href="#booking"]:hover::after, a.btn[href="#booking"]:focus-visible::after
   background-repeat: no-repeat; background-position: 0 calc(100% - var(--space-2)); background-size: 0 var(--stroke);
   transition: background-size var(--ui-mid) var(--ui-ease), color var(--ui-fast); }
 .nl:hover, .nl:focus-visible { text-decoration: none; background-size: 100% var(--stroke); }
-.nl::before { content: ">"; display: inline-block; max-width: 0; opacity: 0; overflow: hidden;
-  transition: max-width var(--ui-mid) var(--ui-ease), opacity var(--ui-fast); }
-.nl:hover::before, .nl:focus-visible::before { max-width: 1ch; opacity: 1; }
+/* При наведенні пункт інвертується, як виділення в DOS-меню; розмір пункту не змінюється */
+.nl { transition: background-size var(--ui-mid) var(--ui-ease), background-color var(--ui-fast), color var(--ui-fast); }
+.nl:hover { background-color: var(--button); color: var(--button-text); }
 
 /* Перемикач мови */
 .lang { transition: background-color var(--ui-fast), color var(--ui-fast), box-shadow var(--ui-fast), transform var(--ui-fast) var(--ui-ease); }
-.lang[aria-pressed="false"]:hover { transform: translate(var(--lift), var(--lift)); box-shadow: inset 0 0 0 var(--stroke) var(--border), var(--shadow-button); }
+.lang[aria-pressed="false"]:hover { box-shadow: inset 0 0 0 var(--stroke) var(--border), var(--shadow-button); }
 .lang:active { transform: translate(var(--press-offset), var(--press-offset)); box-shadow: var(--shadow-none); }
 
 /* Картки-вікна: при наведенні піднімаються, рядок заголовка стає яскравішим, кнопки вікна «світяться» */
-.card { transition: transform var(--ui-mid) var(--ui-ease), box-shadow var(--ui-mid) var(--ui-ease); }
+.card { position: relative; transition: transform var(--ui-mid) var(--ui-ease), box-shadow var(--ui-mid) var(--ui-ease); }
+/* Невидима «підкладка»: коли картка піднялася, вона закриває смужку, з якої картка з'їхала —
+   тож курсор біля нижнього/правого краю не втрачає наведення і картка не смикається */
+.card::after { content: ""; position: absolute; z-index: -1; inset: calc(var(--stroke) * -1); }
+.card:hover::after { inset: calc(var(--stroke) * -1) calc(var(--lift) - var(--stroke)) calc(var(--lift) - var(--stroke)) calc(var(--stroke) * -1); }
 @media (hover: hover) {
 .card:hover, .card:focus-within {
   transform: translate(var(--lift), var(--lift));
@@ -457,13 +494,13 @@ a.btn[href="#booking"]:hover::after, a.btn[href="#booking"]:focus-visible::after
 }
 
 /* Підвал: посилання з анімованим підкресленням і зсувом */
-.ftr-nav .ftr-link { align-self: flex-start; transition: transform var(--ui-mid) var(--ui-ease), text-decoration-thickness var(--ui-fast); }
-.ftr-nav .ftr-link::before { content: ">"; display: inline-block; max-width: 0; opacity: 0; overflow: hidden; margin-right: 0;
-  transition: max-width var(--ui-mid) var(--ui-ease), opacity var(--ui-fast), margin var(--ui-mid); }
-.ftr-nav .ftr-link:hover, .ftr-nav .ftr-link:focus-visible { transform: translateX(var(--space-1)); text-decoration-thickness: var(--stroke-strong); }
-.ftr-nav .ftr-link:hover::before, .ftr-nav .ftr-link:focus-visible::before { max-width: 1ch; opacity: 1; margin-right: var(--space-1); }
-a.ftr-link[href^="tel:"] { transition: transform var(--ui-fast) var(--ui-ease); }
-a.ftr-link[href^="tel:"]:hover { transform: translateX(var(--space-1)); }
+.ftr-nav .ftr-link { position: relative; align-self: flex-start; transition: padding var(--ui-mid) var(--ui-ease), text-decoration-thickness var(--ui-fast); }
+.ftr-nav .ftr-link::before { content: ">"; position: absolute; left: 0; top: 50%; transform: translateY(-50%); opacity: 0;
+  transition: opacity var(--ui-fast); }
+.ftr-nav .ftr-link:hover, .ftr-nav .ftr-link:focus-visible { padding-left: calc(1ch + var(--space-2)); text-decoration-thickness: var(--stroke-strong); }
+.ftr-nav .ftr-link:hover::before, .ftr-nav .ftr-link:focus-visible::before { opacity: 1; }
+a.ftr-link[href^="tel:"] { transition: padding var(--ui-fast) var(--ui-ease); }
+a.ftr-link[href^="tel:"]:hover { padding-left: var(--space-1); }
 a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2); }
 
 @media (prefers-reduced-motion: reduce) {

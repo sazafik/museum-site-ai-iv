@@ -8,6 +8,7 @@
 
   function $(sel, root) { return (root || document).querySelector(sel); }
   function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  var refreshDecor = null;
   function t(key) { return (CONTENT[lang] || CONTENT.uk || {})[key]; }
 
   /* ---------- Мова ---------- */
@@ -40,6 +41,7 @@
     // Посилання, що ведуть на різні сторінки залежно від мови (наприклад, «Статті»)
     $$('[data-href-' + lang + ']').forEach(function (a) { a.setAttribute('href', a.getAttribute('data-href-' + lang)); });
     updateSentLabel();
+    if (refreshDecor) refreshDecor();
     if (remember) {
       try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
       var url = new URL(window.location.href);
@@ -105,6 +107,91 @@
       if (entries[0].isIntersecting) setCurrent(null);
     }, { rootMargin: '-45% 0px -50% 0px' }).observe(hero);
   }
+
+  /* ---------- Вікно MUSEUM.EXE: «екран», що гортає експонати ---------- */
+
+  (function initDecor() {
+    var box = $('.decor');
+    if (!box) return;
+    var cards = $$('#exhibits-grid > .card-exhibit');
+    if (!cards.length) return;
+    var imgCur = $('.decor-img', box), imgNext = $('.decor-next', box);
+    var cmd = $('.decor-cmd', box), nameEl = $('.decor-name', box), countEl = $('.decor-count', box), yearEl = $('.decor-year', box);
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    var PROMPT = 'C:\\MUSEUM> run ';
+    var STEP = 4500;
+    var i = 0, timer = null, typing = null, paused = false;
+
+    function item(n) {
+      var c = cards[n];
+      return {
+        src: $('img', c).getAttribute('src'),
+        file: ($('.wtitle span', c).textContent || '').trim().toLowerCase(),
+        name: ($('h3', c).textContent || '').trim(),
+        year: ($('.year', c).textContent || '').trim()
+      };
+    }
+    function countText(n) {
+      return (t('k149') || '{n} / {m}').replace('{n}', n + 1).replace('{m}', cards.length);
+    }
+    function fill(n) {
+      var it = item(n);
+      cmd.textContent = PROMPT + it.file;
+      nameEl.textContent = it.name;
+      yearEl.textContent = it.year;
+      countEl.textContent = countText(n);
+    }
+    // Команда «друкується» по літері, потім на екрані з'являється новий експонат
+    function typeCmd(file, done) {
+      clearInterval(typing);
+      if (reduce.matches) { done(); return; }
+      var k = 0;
+      cmd.textContent = PROMPT;
+      nameEl.textContent = '';
+      typing = setInterval(function () {
+        k++;
+        cmd.textContent = PROMPT + file.slice(0, k);
+        if (k >= file.length) { clearInterval(typing); done(); }
+      }, 45);
+    }
+    function show(n) {
+      var it = item(n);
+      typeCmd(it.file, function () {
+        var pre = new Image();
+        pre.onload = pre.onerror = function () {
+          imgNext.src = it.src;
+          imgNext.hidden = false;
+          box.classList.remove('is-switching');
+          void imgNext.offsetWidth;
+          box.classList.add('is-switching');
+          setTimeout(function () {
+            imgCur.src = it.src;
+            imgNext.hidden = true;
+            box.classList.remove('is-switching');
+          }, 560);
+          fill(n);
+        };
+        pre.src = it.src;
+      });
+    }
+    function schedule() {
+      clearTimeout(timer);
+      if (paused || reduce.matches || document.hidden) return;
+      timer = setTimeout(function () { i = (i + 1) % cards.length; show(i); schedule(); }, STEP);
+    }
+    // Наведення ставить показ на паузу
+    box.addEventListener('mouseenter', function () { paused = true; box.classList.add('is-paused'); clearTimeout(timer); });
+    box.addEventListener('mouseleave', function () { paused = false; box.classList.remove('is-paused'); schedule(); });
+    document.addEventListener('visibilitychange', schedule);
+
+    // Після зміни мови оновлюємо підписи, не перериваючи анімацію
+    refreshDecor = function () {
+      countEl.textContent = countText(i);
+      if (nameEl.textContent) nameEl.textContent = item(i).name;
+    };
+    fill(0);
+    schedule();
+  })();
 
   /* ---------- Експонати: «Показати більше» ---------- */
 
