@@ -533,3 +533,12 @@ a.ftr-link[href^="tel:"]::before { content: "☎"; margin-right: var(--space-2);
 /* Контакти: карта забирає вільну висоту, щоб вікно не мало порожнього низу */
 #contacts .contacts-body { flex-grow: 1; }
 #contacts .ph-map { flex-grow: 1; min-height: 0; }
+/* Картки екскурсій і курсів: заголовок, опис, кожен рядок характеристик і кнопка
+   стоять на одному рівні в усіх картках ряду (subgrid) */
+@supports (grid-template-rows: subgrid) {
+  .g3:has(> .card .facts) { row-gap: var(--space-6); }
+  .g3:has(> .card .facts) > .card { display: grid; grid-row: span 7; grid-template-rows: subgrid; row-gap: 0; }
+  .g3:has(> .card .facts) > .card > .winbody { display: grid; grid-row: span 6; grid-template-rows: subgrid; row-gap: var(--space-4); }
+  .g3:has(> .card .facts) .facts { grid-row: span 3; grid-template-rows: subgrid; row-gap: var(--space-3); }
+  .g3:has(> .card .facts) .card .btn { align-self: end; }
+}
