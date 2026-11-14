@@ -203,9 +203,9 @@ function page({ lang, base, title, description, alternates, body }) {
   <title>${esc(title)}</title>
   <meta name="description" content="${esc(description)}">
 ${alt}
-  <link rel="stylesheet" href="${base}assets/css/fonts.css?v=20261114b">
-  <link rel="stylesheet" href="${base}assets/css/tokens.css?v=20261114b">
-  <link rel="stylesheet" href="${base}assets/css/site.css?v=20261114b">
+  <link rel="stylesheet" href="${base}assets/css/fonts.css?v=20261114c">
+  <link rel="stylesheet" href="${base}assets/css/tokens.css?v=20261114c">
+  <link rel="stylesheet" href="${base}assets/css/site.css?v=20261114c">
 </head>
 <body id="top">
 <!-- Згенеровано tools/build-articles.js — не редагуйте вручну, змінюйте .md-файли в articles/ -->
@@ -222,9 +222,9 @@ ${body}
 
 ${chrome(FOOTER, base, lang)}
 
-<script src="${base}assets/js/content.uk.js?v=20261114b"></script>
-<script src="${base}assets/js/content.en.js?v=20261114b"></script>
-<script src="${base}assets/js/app.js?v=20261114b"></script>
+<script src="${base}assets/js/content.uk.js?v=20261114c"></script>
+<script src="${base}assets/js/content.en.js?v=20261114c"></script>
+<script src="${base}assets/js/app.js?v=20261114c"></script>
 </body>
 </html>
 `;
